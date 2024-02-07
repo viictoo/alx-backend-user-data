@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """implements a log filter that will obfuscate PII fields"""
 from mysql.connector import connection
 import os
