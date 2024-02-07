@@ -29,8 +29,9 @@ Here's a high-level approach:
 6. Proceed with the regular logging process, storing the obfuscated log messages.
 
 It's important to consider security and compliance requirements when implementing PII obfuscation.using applicable regulations and best practices for handling PII, eg
-- General Data Protection Regulation (GDPR)
-- Health Insurance Portability and Accountability Act (HIPAA).
+- General Data Protection Regulation (GDPR)  EU privacy law and human rights law that aims to protect the personal data of individuals and enhance their control over it.
+- Health Insurance Portability and Accountability Act (HIPAA). governing patient privacy
+- Children’s Online Privacy Protection Act (COPPA), designed to protect the personal information of children under the age of 13
 
 Encrypting a password and checking its validity:
 To encrypt a password, use a strong, industry-standard cryptographic algorithm like
