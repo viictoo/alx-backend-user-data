@@ -9,25 +9,26 @@ import logging
 PII_FIELDS = ('name', 'email', 'phone', 'password', 'ssn')
 
 
-def filter_datum(
-        fields: List[str],
-        redaction: str,
-        message: str,
-        separator: str,
-) -> str:
-    """returns obfuscated logs using re
-    Args:
-        fields:     a list of strings representing all fields to obfuscate
-        redaction:  a string representing by what the field will be obfuscated
-        message:    a string representing the log line
-        separator:  a string representing by which character is
-                    separating all fields in the log line
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
     """
-    logtext = message
+    This function returns the log message obfuscated.
+    >>> filter_datum = __import__('filtered_logger').filter_datum
+    >>> fields = ["password", "date_of_birth"]
+    >>> messages = ["name=egg;email=eggmin@eggsample.com;password=eggcellent;
+    date_of_birth=12/12/1986;",
+    "name=bob;email=bob@dylan.com;password=bobbycool;date_of_birth=03/04/1993;"]
+    >>> for message in messages:
+    ...    print(filter_datum(fields, 'xxx', message, ';'))
+    ...
+    name=egg;email=eggmin@eggsample.com;password=xxx;date_of_birth=xxx;
+    name=bob;email=bob@dylan.com;password=xxx;date_of_birth=xxx;
+    >>>
+    """
     for field in fields:
-        logtext = re.sub(field + "=.*?" + separator,
-                         field + "=" + redaction + separator, logtext)
-    return logtext
+        message = re.sub(
+            rf'{field}=([^{separator}]+)', f'{field}={redaction}', message)
+    return message
 
 
 def get_logger() -> logging.Logger:
