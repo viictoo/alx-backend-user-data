@@ -55,10 +55,11 @@ def get_db() -> MySQLConnection:
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        """
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    FORMAT_FIELDS = ('name', 'levelname', 'asctime', 'message')
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
@@ -66,12 +67,11 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """ filter values in incoming log records using filter_datum.
-            Values for fields in fields should be filtered
+        """formats a LogRecord.
         """
-        return filter_datum(
-            self.fields, self.REDACTION, super(
-                RedactingFormatter, self).format(record), self.SEPARATOR)
+        msg = super(RedactingFormatter, self).format(record)
+        txt = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
+        return txt
 
 
 def main() -> None:
