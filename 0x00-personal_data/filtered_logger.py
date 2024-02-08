@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""implements a log filter that will obfuscate PII fields"""
-from mysql.connector.connection import MySQLConnection
-import os
-import re
+"""
+This module implements functions, methods and class that demonstrate
+> How to implement a log filter that will obfuscate PII fields
+> How to encrypt a password and check the validity of an input password
+> How to authenticate to a database using environment variables
+"""
 from typing import List
+import re
 import logging
-
-PII_FIELDS = ('name', 'email', 'phone', 'password', 'ssn')
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -31,68 +32,24 @@ def filter_datum(fields: List[str], redaction: str,
     return message
 
 
-def get_logger() -> logging.Logger:
-    """return logging.Logger object"""
-    logger = logging.getLogger('user_data')
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-    stream_handler = logging.StreamHandler()
-    # use PII fields to redact personal info
-    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
-    logger.addHandler(stream_handler)
-    return logger
-
-
-def get_db() -> MySQLConnection:
-    """securely connect to the db using environment variables"""
-    return MySQLConnection(
-        user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-        port=3306,
-        password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
-        host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        database=os.getenv("PERSONAL_DATA_DB_NAME")
-    )
-
-
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        """
-
+    """
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]):
+    def __init__(self, fields: List[str]) -> None:
+        '''
+        The first method to be called at the instance of the class.
+        '''
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """ filter values in incoming log records using filter_datum.
-            Values for fields in fields should be filtered
+        """formats an instance of a LogRecord with super class format
         """
-        return filter_datum(
-            self.fields, self.REDACTION, super(
-                RedactingFormatter, self).format(record), self.SEPARATOR)
-
-
-def main() -> None:
-    """ main function that takes no arguments and returns nothing
-        obtain a database connection using get_db and retrieve all
-        rows in users table and disp each row under filtered format
-    """
-
-    db_connector = get_db()
-    csr = db_connector.cursor()
-    csr.execute("SELECT * FROM users;")
-    logger = get_logger()
-    for row in csr:
-        message = ""
-        for i in range(len(row)):
-            message += f"{csr.column_names[i]}={str(row[i])}; "
-        logger.info(message)
-    csr.close()
-    db_connector.close()
-
-
-if __name__ == "__main__":
-    main()
+        recMsg = record.msg
+        record.msg = filter_datum(
+            self.fields, self.REDACTION, recMsg, self.SEPARATOR)
+        return super().format(record)
