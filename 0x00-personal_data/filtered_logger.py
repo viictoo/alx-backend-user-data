@@ -78,22 +78,17 @@ def main() -> None:
         obtain a database connection using get_db and retrieve all
         rows in users table and disp each row under filtered format
     """
-    db_connector = get_db()
-    cur = db_connector.cursor()
-    q_users = ("SELECT * FROM users;")
-    cur.execute(q_users)
-    users = cur.fetchall()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
     logger = get_logger()
-
-    for usr in users:
-        str = 'name={}; email={}; phone={}; ssn={}; password={}; ip={}; '\
-            'last_login={}; user_agent={};'
-        str = str.format(
-            usr[0], usr[1], usr[2], usr[3], usr[4], usr[5], usr[6], usr[7])
-        logger.info(str)
-
-    cur.close()
-    db_connector.close()
+    for row in cursor:
+        message = ""
+        for i in range(len(row)):
+            message += f"{cursor.column_names[i]}={str(row[i])}; "
+        logger.info(message)
+    cursor.close()
+    db.close()
 
 
 if __name__ == "__main__":
