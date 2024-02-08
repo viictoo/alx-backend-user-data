@@ -46,6 +46,7 @@ def get_db() -> MySQLConnection:
     """securely connect to the db using environment variables"""
     return MySQLConnection(
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        port=3306,
         password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
         database=os.getenv("PERSONAL_DATA_DB_NAME")
