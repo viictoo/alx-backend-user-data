@@ -80,8 +80,7 @@ def main() -> None:
     """
     db_connector = get_db()
     cur = db_connector.cursor()
-    q_users = ('SELECT * FROM users;')
-
+    q_users = ("SELECT * FROM users;")
     cur.execute(q_users)
     users = cur.fetchall()
     logger = get_logger()
