@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """implements a log filter that will obfuscate PII fields"""
-from mysql.connector import connection
+from mysql.connector.connection import MySQLConnection
 import os
 import re
 from typing import List
@@ -42,18 +42,14 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> connection.MySQLConnection:
+def get_db() -> MySQLConnection:
     """securely connect to the db using environment variables"""
-    db_user = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    db_pass = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    db_host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
-    db_connector = connection.MySQLConnection(
-        user=db_user,
-        password=db_pass,
-        host=db_host,
-        database=db_name)
-    return db_connector
+    return MySQLConnection(
+        user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        database=os.getenv("PERSONAL_DATA_DB_NAME")
+    )
 
 
 class RedactingFormatter(logging.Formatter):
