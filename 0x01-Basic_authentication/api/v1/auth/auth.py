@@ -13,11 +13,15 @@ class Auth:
         """returns False"""
         if not path or not excluded_paths or excluded_paths == []:
             return True
+
         if not path.endswith('/'):
             path = path + '/'
 
-        if path in excluded_paths:
-            return False
+        for xclude in excluded_paths:
+            if xclude == path or path.startswith(xclude.split('*')[0]):
+                return False
+        # if path in excluded_paths:
+        #     return False
         return True
 
     def authorization_header(self, request=None) -> str:
@@ -29,4 +33,3 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """returns None"""
         return None
-   

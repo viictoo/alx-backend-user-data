@@ -75,4 +75,3 @@ class BasicAuth(Auth):
         decoded = self.decode_base64_authorization_header(to_b64)
         clean_data = self.extract_user_credentials(decoded)
         return self.user_object_from_credentials(*clean_data)
- 
