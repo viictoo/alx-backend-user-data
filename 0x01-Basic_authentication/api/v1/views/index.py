@@ -32,13 +32,13 @@ def error_401() -> str:
     Return:
       - the number of each objects
     """
-    abort(401)
+    return abort(401)
 
-  
+
 @app_views.route('/forbidden/', strict_slashes=False)
 def error_403() -> str:
     """ GET /api/v1/stats
     Return:
       - the number of each objects
     """
-    abort(403)
+    return abort(403)
