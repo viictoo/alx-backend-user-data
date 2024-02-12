@@ -8,7 +8,7 @@ from models.user import User
 
 
 class BasicAuth(Auth):
-    """Basic Auth"""
+    """Basic User Auth"""
 
     def extract_base64_authorization_header(
             self, authorization_header: str) -> str:
@@ -18,7 +18,7 @@ class BasicAuth(Auth):
         if (authorization_header is None or
             type(authorization_header) is not str or
                 not authorization_header.startswith("Basic ")):
-            print(authorization_header)
+            # print(authorization_header)
             return None
         return (authorization_header[6:])
 
