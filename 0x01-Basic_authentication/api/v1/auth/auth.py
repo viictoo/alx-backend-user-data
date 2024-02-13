@@ -20,8 +20,6 @@ class Auth:
         for xclude in excluded_paths:
             if xclude == path or path.startswith(xclude.split('*')[0]):
                 return False
-        # if path in excluded_paths:
-        #     return False
         return True
 
     def authorization_header(self, request=None) -> str:
