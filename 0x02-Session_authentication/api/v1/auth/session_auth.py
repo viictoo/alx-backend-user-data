@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module of basic auth views
+""" Module of session auth views
 """
 from .auth import Auth
 import base64
