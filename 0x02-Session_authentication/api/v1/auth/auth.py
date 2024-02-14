@@ -4,6 +4,7 @@
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from typing import TypeVar, List
+from os import getenv
 
 
 class Auth:
@@ -31,3 +32,11 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """returns None"""
         return None
+
+    def session_cookie(self, request=None):
+        """returns a cookie value from a request
+        """
+        if request is None:
+            return None
+        _my_session_id = getenv("SESSION_NAME")
+        return request.cookies.get(_my_session_id)
