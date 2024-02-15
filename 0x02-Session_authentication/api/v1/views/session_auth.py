@@ -27,10 +27,27 @@ def session() -> str:
         users = User.search({'email': user_email})
         for user in users:
             if user.is_valid_password(user_pwd):
+
                 from api.v1.app import auth
+
                 session_id = auth.create_session(user.id)
+                # jsonify returns a Response object, so capture it
+                # before returning from your view and add the cookie
+                # then with Response.set_cookie.
                 resp = jsonify(user.to_json())
                 session_name = getenv('SESSION_NAME')
                 resp.set_cookie(session_name, session_id)
                 return resp
+
         return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout', methods=["DELETE"],
+                 strict_slashes=False)
+def logout_session():
+    """ delete the Session ID contained in the request as cookie
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
