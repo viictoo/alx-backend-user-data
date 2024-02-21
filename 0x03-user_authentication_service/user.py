@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """User Model  for a database table named users"""
 
 from sqlalchemy import Column, Integer, String
