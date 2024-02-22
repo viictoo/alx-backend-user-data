@@ -45,14 +45,11 @@ class DB:
         """find a user from the db given arbitrary args"""
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
-            print(f'user found is {user}')
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
             raise InvalidRequestError()
         return user
-    
-    
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """takes arbitrary keyword arguments, and returns None"""
