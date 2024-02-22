@@ -16,7 +16,7 @@ def register_user(email: str, password: str) -> None:
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
-    """ assert correct response to register user with 
+    """ assert correct response to register user with
         email and incorrect password."""
     pass
 
@@ -29,7 +29,7 @@ def profile_unlogged() -> None:
 
 def log_in(email: str, password: str) -> str:
     """
-    assert correct response to 
+    assert correct response to
     logging email and password
     returns session ID"""
     return None
