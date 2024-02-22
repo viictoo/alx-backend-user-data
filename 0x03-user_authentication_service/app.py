@@ -45,12 +45,26 @@ def login():
 
 @app.route('/sessions', methods=['DELETE'])
 def logout():
-    """basepath: Logout user"""
+    """basepath: DELETE user session"""
     session_id = request.cookies.get('session_id')
     marehemu = AUTH.get_user_from_session_id(session_id=session_id)
     if marehemu:
         AUTH.destroy_session(marehemu.id)
         return redirect('/')
+    abort(403)
+
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    """
+    request is expected to contain a session_id cookie.
+    Use it to find the user. If the user exist, respond
+    with a 200 HTTP status and a JSON payload:
+    """
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id=session_id)
+    if user:
+        return jsonify({"email": user.email})
     abort(403)
 
 
